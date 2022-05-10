@@ -2,27 +2,34 @@
  * input.h
  *
  *  Created on: 11/04/2022
- *      Author: melys
+ *      Author: Melina Ochoa
  */
 
 #ifndef INPUT_H_
 #define INPUT_H_
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdio__ext.h>
+#include <stdio_ext.h>
 #include <string.h>
-#include "Calculos.h"
+#include <ctype.h>
+
 
 //Validaciones
-int myGets(char* cadena, int longitud);
 
-int getInt(int* pResultado);
+
+
 
 int esNumerica(char* cadena);
 
-int getFloat(int* pResultado);
+
 
 int esNumeroDecimal(char* cadena);
+
+
+
+int soloLetra(char* pResultado);
+
+int esConEspacio(char *pResultado);
 
 
 
@@ -64,6 +71,11 @@ int getNumero(int* pResultado,char mensaje[],char mensajeError[],int maximo,int 
  * @param aerolineas variable para mostrar
  * @param latam variable para mostrar
  */
-void menu(int* opcion, int km, float aerolineas, float latam);
+int utn_getString(char letras[],char mensaje[],char mensajeError[],int reintentos);
 
+int getChar(char* letra,char mensaje[],char mensajeError[],int reintentos);
+
+int get_Int(char mensaje[], char mensajeEror[]);
+
+int utn_getCaracterSN(void);
 #endif /* INPUT_H_ */
