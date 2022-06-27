@@ -23,19 +23,19 @@ static int GenerarId(void)
 
 void printPassenger(Passenger pasajeros)
 {
-        printf("\n %5d %15s %15s %15f %15d %15s", pasajeros.id, pasajeros.name,pasajeros.lastName,pasajeros.price,pasajeros.typePassenger,pasajeros.flycode);
+	 printf("\n %-5d %-10s %-10s %-5.2f %-5d %-10s",pasajeros.id,pasajeros.name,pasajeros.lastName,pasajeros.price,pasajeros.typePassenger,pasajeros.flycode);
 }
-int printPassengers(Passenger array[], int len)
+int printPassengers(Passenger* array, int len)
 {
         int i;
         int retorno=-1;
         puts("\n\tListado Pasajeros\n");
-        printf("%5s %15s %15s %15s %15s %15s","ID","APELLIDO","NOMBRE","PRECIO","TIPO DE PASAJERO","CODIGO VUELO");
+        printf("%-5s %-10s %-10s %-10s %-5s %-10s","ID","APELLIDO","NOMBRE","PRECIO","TIPO DE PASAJERO","CODIGO VUELO");
         if(array!=NULL && len>0)
         {
                 for(i=0; i<len;i++)
                 {
-                    if (array[i].isEmpty == 0)
+                    if (array[i].isEmpty==0)
                     {
                          continue;
                     }
@@ -89,8 +89,8 @@ int buscarLibre(Passenger list[], int len)
 
 Passenger CargaDatos(Passenger aux)
 {
-  utn_getString(aux.name,"\nIngrese nombre del pasajero: ","\nError reingrese: ",2);
-  utn_getString(aux.lastName,"\nIngrese apellido del pasajero: ","\nError reingrese: ",2);
+  utn_getNombre(aux.name,"\nIngrese nombre del pasajero: ","\nError reingrese: ",2, 51);
+  utn_getNombre(aux.lastName,"\nIngrese apellido del pasajero: ","\nError reingrese: ",2, 51);
   getNumeroFloat(&aux.price,"\nIngrese precio: ","\nError reingrese: ",1000000,0,2);
   getNumero(&aux.typePassenger,"\n10.Pimera Clase \n9.Economico \n8.Ejecutivo \n7.Turista "
             "\nIngrese tipo de pasajero: ", "\nError reingrese: ",10,7,2);
@@ -110,7 +110,7 @@ int addPassenger(Passenger list[], int len)
         printf("No hay lugares libres");
     }
     else{
-              CargaDatos(aux);
+              aux=CargaDatos(aux);
               aux.id=GenerarId();
               strcpy(list[indexLibre].name,aux.name);
               strcpy(list[indexLibre].lastName,aux.lastName);
@@ -244,13 +244,11 @@ void menu(int* opcion)
 {
   int aux;
   printf("\t\t Bienvenido\n");
-  do{
       printf("\n1.Alta\n2.Modificar\n3.Baja\n4.Informar\n5.Salir");
       if(getNumero(&aux,"\nIngrese opcion: ","\nError reingrese: ",5,1,2)==0)
       {
          *opcion=aux;
       }
-    }while(aux==5);
 }
 
 void subMenu(int* resp)

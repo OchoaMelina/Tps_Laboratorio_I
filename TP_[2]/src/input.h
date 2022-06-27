@@ -9,7 +9,6 @@
 #define INPUT_H_
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdio_ext.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -19,7 +18,7 @@
 
 
 
-int esNumerica(char* cadena);
+int esNumerica(char* cadena, int longitud);
 
 
 
@@ -78,4 +77,13 @@ int getChar(char* letra,char mensaje[],char mensajeError[],int reintentos);
 int get_Int(char mensaje[], char mensajeEror[]);
 
 int utn_getCaracterSN(void);
+
+int esNombre(char* cadena,int longitud);
+
+int getNombre(char* pResultado, int longitud);
+
+void formaNombre(char *pResultado);
+
+int utn_getNombre(char* pResultado, char* mensaje, char* mensajeError,int reintentos, int longitud);
+
 #endif /* INPUT_H_ */

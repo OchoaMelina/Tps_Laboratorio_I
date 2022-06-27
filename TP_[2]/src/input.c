@@ -16,21 +16,25 @@ static int getString(char pLetrasTomadas[]);
 
 static int myGets(char* cadena, int longitud)
 {
-  int retorno=-1;
-  if(cadena!=NULL && longitud>0)
-    {
-        if(fgets(cadena,longitud,stdin)==cadena)
-        {
-            __fpurge(stdin);
-            if(cadena[strlen(cadena)-1]=='\n')
-            {
-                cadena[strlen(cadena)-1]='\0';
-                retorno=0;
-            }
-        }
-
-    }
-  return retorno;
+	int retorno=-1;
+	char bufferString[5000];
+	if(cadena!=NULL && longitud>0)
+	{
+		fflush(stdin);
+		if(fgets(bufferString, sizeof(bufferString),stdin)!=NULL)
+		{
+			if(bufferString[strnlen(bufferString, sizeof(bufferString))-1] =='\n')
+			{
+				bufferString[strnlen(bufferString,sizeof(bufferString))-1] = '\0';
+			}
+			if(strnlen(bufferString, sizeof(bufferString))<=longitud)
+			{
+				strncpy(cadena, bufferString, longitud);
+				retorno=0;
+			}
+		}
+	}
+	return retorno;
 }
 
 static int getInt(int* pResultado)
@@ -39,7 +43,7 @@ static int getInt(int* pResultado)
   char buffer[64];
   if(pResultado!=NULL)
     {
-      if(myGets(buffer,sizeof(buffer))==0 && esNumerica(buffer))
+      if(myGets(buffer,sizeof(buffer))==0 && esNumerica(buffer,sizeof(buffer))==1)
         {
           *pResultado=atoi(buffer);
           retorno=0;
@@ -48,24 +52,28 @@ static int getInt(int* pResultado)
   return retorno;
 }
 
-int esNumerica(char* cadena)
+int esNumerica(char* cadena, int longitud)
 {
-  int i=0;
-  int retorno=-1;
-  if(cadena!=NULL && strlen(cadena)>0)
-    {
-      while(cadena[i]!='\0')
-        {
-          if(cadena[i]<'0' || cadena[i]>'9')
-            {
-              retorno=0;
-              break;
-            }
-          i++;
-        }
-    }
-  return retorno;
-}
+	int retorno= 1;
+		int i;
+		if(cadena!=NULL)
+		{
+
+			for(i=0; i<longitud && cadena[i]!='\0'; i++)
+			{
+				if(i==0 && (cadena[i]=='+' || cadena[i]=='-'))
+				{
+					continue;
+				}
+				if(cadena[i]<'0'||cadena[i]>'9')
+				{
+					retorno=0;
+					break;
+				}
+			}
+		}
+		return retorno;
+	}
 
 
 
@@ -230,7 +238,6 @@ int utn_getString(char letras[],char mensaje[],char mensajeError[],int reintento
 {
         int retorno=-1;
         char bufferString[40];
-
         if(letras!=NULL && mensaje!=NULL && mensajeError!=NULL && reintentos!=0)
         {
                 do
@@ -281,7 +288,7 @@ int getChar(char* letra,char mensaje[],char mensajeError[],int reintentos)
                 do
                         {
                                 printf("%s", mensaje);
-                                __fpurge(stdin);
+                                fflush(stdin);
                                 if(scanf("%c",&bufferChar)==0)
                                 {
                                        *letra=bufferChar;
@@ -303,13 +310,13 @@ int utn_getCaracterSN(void)
         char c;
 
         printf("\nIngrese 's' Si o 'n' No");
-        __fpurge(stdin);
+        fflush(stdin);
         scanf("%c",&c);
 
         while(c!='s' && c!='n')
         {
             printf("\nError. Ingrese 's' Si o 'n' No");
-            __fpurge(stdin);
+            fflush(stdin);
             scanf("%c",&c);
 
         }
@@ -318,4 +325,85 @@ int utn_getCaracterSN(void)
                         retorno = 0;
                 }
         return retorno;
+}
+int esNombre(char* cadena,int longitud)
+{
+	int retorno = 1;
+
+	if(cadena!=NULL && longitud>0)
+	{
+		for(int i=0; i<=longitud && cadena[i] != '\0';i++)
+		{
+			if((cadena[i]<'A' || cadena[i]>'Z') && (cadena[i]<'a' || cadena[i]>'z') && cadena[i] != '.')
+			{
+				retorno = 0;
+				break;
+			}
+		}
+	}
+	return retorno;
+}
+int getNombre(char* pResultado, int longitud)
+{
+	int retorno=-1;
+	char buffer[5000];
+	if(pResultado!=NULL && longitud>0)
+	{
+		if(myGets(buffer, sizeof(buffer))==0 && esNombre(buffer, sizeof(buffer))!=0 && strnlen(buffer, sizeof(buffer))<=longitud)
+		{
+			strncpy(pResultado, buffer, longitud);
+			retorno=0;
+		}
+	}
+	return retorno;
+}
+
+void formaNombre(char *pResultado)
+{
+	if(pResultado!=NULL && strlen(pResultado)>0)
+	{
+		strlwr(pResultado);
+		for(int i = 0; i < strlen(pResultado); i++)
+		{
+			if (i == 0 && isspace(pResultado[i]) == 0)
+			{
+				pResultado[0] = toupper(pResultado[0]);
+
+			}
+			else
+			{
+				if(pResultado[i]=='.' && (i<strlen(pResultado)- 1))
+				{
+					pResultado[i + 1] = toupper(pResultado[i + 1]);
+				}
+			}
+		}
+	}
+}
+
+int utn_getNombre(char* pResultado, char* mensaje, char* mensajeError,int reintentos, int longitud)
+{
+	char bufferString[1000];
+	int retorno = -1;
+
+	if(mensaje != NULL && mensajeError != NULL && pResultado != NULL && reintentos >= 0 && longitud > 0)
+	{
+		do
+		{
+			printf("%s",mensaje);
+			if(getNombre(bufferString, 1000)==0)
+			{
+				formaNombre(bufferString);
+				strncpy(pResultado,bufferString,longitud);
+				retorno = 0;
+				break;
+			}
+			else
+			{
+				printf("%s",mensajeError);
+				reintentos--;
+			}
+		}while(reintentos>=0);
+	}
+	return retorno;
 }

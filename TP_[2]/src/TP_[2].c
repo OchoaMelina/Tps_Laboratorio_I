@@ -15,7 +15,7 @@
 #define DESCENDENTE 0
 
 int main(void) {
-
+	setbuf(stdout,NULL);
       int flagAlta=-1;
       int opcion;
       int resp;
@@ -65,7 +65,7 @@ int main(void) {
                            switch(resp)
                            {
                              case 1:
-                                    sortPassengers(pasajeros,MAX_PASSENGER,0);
+                            	 sortPassengers(pasajeros,MAX_PASSENGER,1);
                                     printPassengers(pasajeros,MAX_PASSENGER);
                                     break;
                              case 2:
@@ -78,6 +78,7 @@ int main(void) {
                            }
                        }while(resp!=4);
                      }
+                     break;
 
            }
       }while(opcion!=5);

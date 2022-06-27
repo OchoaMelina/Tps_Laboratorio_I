@@ -43,7 +43,7 @@ int sortPassengers(Passenger* list, int len, int order)
                        {
                            if(order == 0)
                             {
-                              if(strcmp(list[i+1].lastName,list[i].lastName)>0)
+                              if(strcmp(list[i+1].lastName,list[i].lastName)==0)
                                {
                                     aux=list[i];
                                     list[i]=list[i+1];
@@ -150,7 +150,7 @@ int promPrecio(float* promedioResultado, Passenger list[], int len)
                         }
                 }
                 *promedioResultado = (float)acumulador/contador;
-                printf("El Total de salario es: %d\n", acumulador);
+                printf("El Total de los paasajes es: %d\n", acumulador);
                 printf("El salario promedio es: %.2f\n", *promedioResultado);
                 retorno = 0;
         }
