@@ -6,7 +6,8 @@
  */
 
 #include "ArrayPassenger.h"
-#define CANT 200
+#define MAX_PASSENGER 2000
+
 #define PRIMERA_CLASE 10
 #define ECONOMICO 9
 #define EJECUTIVO 8
@@ -21,27 +22,28 @@ static int GenerarId(void)
         return contador++;
 }
 
-void printPassenger(Passenger pasajeros)
+void printPassenger(Passenger list)
 {
-	 printf("\n %-5d %-10s %-10s %-5.2f %-5d %-10s",pasajeros.id,pasajeros.name,pasajeros.lastName,pasajeros.price,pasajeros.typePassenger,pasajeros.flycode);
+        printf("\n %-5d %-15s %-15s %-15.2f %-15d %-15s",list.id,list.name,list.lastName,list.price,list.typePassenger,list.FK_flycode);
 }
-int printPassengers(Passenger* array, int len)
+
+int printPassengers(Passenger list[], int len)
 {
         int i;
         int retorno=-1;
         puts("\n\tListado Pasajeros\n");
-        printf("%-5s %-10s %-10s %-10s %-5s %-10s","ID","APELLIDO","NOMBRE","PRECIO","TIPO DE PASAJERO","CODIGO VUELO");
-        if(array!=NULL && len>0)
+        printf("%5s %15s %15s %15s %15s %15s","ID","NOMBRE","APELLIDO","PRICE","TIPO DE PASAJERO","CODIGO");
+        if(list!=NULL && len>0)
         {
                 for(i=0; i<len;i++)
                 {
-                    if (array[i].isEmpty==0)
+                    if (list[i].isEmpty == 0)
                     {
                          continue;
                     }
                     else
                     {
-                        printPassenger(array[i]);
+                       printPassenger(list[i]);
                         retorno=0;
                     }
                 }
@@ -94,37 +96,44 @@ Passenger CargaDatos(Passenger aux)
   getNumeroFloat(&aux.price,"\nIngrese precio: ","\nError reingrese: ",1000000,0,2);
   getNumero(&aux.typePassenger,"\n10.Pimera Clase \n9.Economico \n8.Ejecutivo \n7.Turista "
             "\nIngrese tipo de pasajero: ", "\nError reingrese: ",10,7,2);
-  utn_getString(aux.flycode,"\nIngrese el codigo de vuelo: ","\nError reingrese: ",2);
   return aux;
 }
 
-int addPassenger(Passenger list[], int len)
+int addPassengers(Passenger list[], int MAX_PASSANGER, eFlight array[], int TAM_VUELOS)
 {
     int retorno=-1;
     int indexLibre;
     Passenger aux;
-
-    indexLibre=buscarLibre(list, len);
-    if(list==NULL && indexLibre==-1)
+    char indexCode[10];
+    if(list!=NULL && MAX_PASSANGER>0)
     {
-        printf("No hay lugares libres");
+    	indexLibre=buscarLibre(list, MAX_PASSANGER);
+    	if(indexLibre==-1)
+    	{
+    	  printf("No hay lugares libres");
+    	}
+    	else{
+    		aux=CargaDatos(aux);
+    		aux.id=GenerarId();
+    		aux.isEmpty=1;
+    		if(array!=NULL && TAM_VUELOS)
+    		{
+    			addFlight(array,TAM_VUELOS);
+    			findFlightByCode(array,TAM_VUELOS,indexCode);
+    			if(indexCode!=NULL)
+    			{
+    				strcpy(aux.FK_flycode,indexCode);
+    			}
+    	    }
+    	    list[indexLibre]=aux;
+    	    retorno=0;
+    	}
     }
-    else{
-              aux=CargaDatos(aux);
-              aux.id=GenerarId();
-              strcpy(list[indexLibre].name,aux.name);
-              strcpy(list[indexLibre].lastName,aux.lastName);
-              strcpy(list[indexLibre].flycode,aux.flycode);
-              list[indexLibre].price=aux.price;
-              list[indexLibre].typePassenger=aux.typePassenger;
-              list[indexLibre].id=aux.id;
-              list[indexLibre].isEmpty=1;
-              retorno=0;
-
-            }
 
     return retorno;
 }
+
+
 
 
 
@@ -210,9 +219,7 @@ Passenger ModificarUno(Passenger copia)
                 case 4:
                         getNumero(&copia.typePassenger,"\nIngreese tipo de pasajero: ","\nError reingrese: ",10,7,2);
                         break;
-                case 5:
-                        utn_getString(copia.flycode,"\nIngrese codigo: ","\nError reingrese:",2);
-                        break;
+
                 }
         return copia;
 }
@@ -253,10 +260,10 @@ void menu(int* opcion)
 
 void subMenu(int* resp)
 {
-  printf("\t INFORMAR: ");
+  printf("\n INFORMAR: ");
   printf("\n1. Listado de los pasajeros ordenados alfabéticamente por Apellido y Tipo de pasajero"
             "\n2. Total y promedio de los precios de los pasajes, y cuántos pasajeros superan el precio promedio"
             "\n3. Listado de los pasajeros por Código de vuelo y estados de vuelos ‘ACTIVO’"
-            "\n4.Salir");
-  getNumero(resp,"\nIngrese a la opcion que desea","\nError reingrese",4,1,2);
+            "\n4. Alta forzada\n5. Salir");
+  getNumero(resp,"\nIngrese a la opcion que desea","\nError reingrese",5,1,2);
 }

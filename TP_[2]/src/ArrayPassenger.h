@@ -10,9 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "input.h"
-#define ACTIVO 0
-#define CANCELADO -1
-#define DEMORADO 1
+#include "Estado.h"
+
 #define PRIMERA_CLASE 10
 #define ECONOMICO 9
 #define EJECUTIVO 8
@@ -25,13 +24,9 @@ typedef struct{
         float price;
         int isEmpty;
         int typePassenger;
-        char flycode[10];
+        char FK_flycode[10];
 }Passenger;
 
-typedef struct{
-        int flycode[10];
-        int statusFlight;
-}eFlight;
 
 void printPassenger(Passenger pasajeros);
 
@@ -52,7 +47,7 @@ int initPassengers(Passenger array[], int len);
 
 Passenger CargaDatos(Passenger aux);
 
-int addPassenger(Passenger list[], int len);
+int addPassengers(Passenger list[], int len, eFlight array[], int TAM_VUELOS);
 
 int modificarPassenger(Passenger lista[], int len);
 

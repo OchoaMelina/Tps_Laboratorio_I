@@ -13,7 +13,9 @@ int sortPassengers(Passenger* list, int len, int order);
 
 int sortPassengersByCode(Passenger* list, int len, int order);
 
-int promPrecio(float* promedioResultado, Passenger list[], int len);
+int PromMaxPrecio(float* promedioResultado, Passenger list[], int len);
+
+void cargaForzada(Passenger array[], int len, eFlight arrayVuelo[], int len2);
 
 
 #endif /* INFORMES_H_ */

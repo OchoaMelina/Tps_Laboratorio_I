@@ -86,4 +86,8 @@ void formaNombre(char *pResultado);
 
 int utn_getNombre(char* pResultado, char* mensaje, char* mensajeError,int reintentos, int longitud);
 
+int getNumeroShort(short int* pResultado,char mensaje[],char mensajeError[],int maximo,int minimo,int reintentos);
+
+int numRango(char mensaje[],char mensajeError[],int max, int min);
+
 #endif /* INPUT_H_ */

@@ -11,6 +11,7 @@
 #include"ArrayPassenger.h"
 #include"Informes.h"
 #define MAX_PASSENGER 2000
+#define TAM_VUELOS 2000
 #define ASCENDENTE 1
 #define DESCENDENTE 0
 
@@ -20,16 +21,19 @@ int main(void) {
       int opcion;
       int resp;
       Passenger pasajeros[MAX_PASSENGER];
+      eFlight vuelos[TAM_VUELOS];
       int id;
       float promedio;
-
+      int auxInt;
+      initPassengers(pasajeros,MAX_PASSENGER);
       do{
+
            menu(&opcion);
            switch(opcion)
            {
              case 1:
-                     initPassengers(pasajeros,MAX_PASSENGER);
-                     flagAlta=addPassenger(pasajeros,MAX_PASSENGER);
+
+                     flagAlta=addPassengers(pasajeros,MAX_PASSENGER,vuelos,TAM_VUELOS);
                      if(flagAlta==0){
                          puts("\nCARGA EXITOSA");
                      }
@@ -65,16 +69,21 @@ int main(void) {
                            switch(resp)
                            {
                              case 1:
-                            	 sortPassengers(pasajeros,MAX_PASSENGER,1);
+                            	 	printf("Ingrese criterio ascendente 1 o descendente 0");
+                            	 	scanf("%d", &auxInt);
+                            	 	sortPassengers(pasajeros,MAX_PASSENGER,auxInt);
                                     printPassengers(pasajeros,MAX_PASSENGER);
                                     break;
                              case 2:
-                                    promPrecio(&promedio,pasajeros,MAX_PASSENGER);
+                            	    PromMaxPrecio(&promedio,pasajeros,MAX_PASSENGER);
                                     break;
                              case 3:
                                     sortPassengersByCode(pasajeros,MAX_PASSENGER,ASCENDENTE);
                                     printPassengers(pasajeros,MAX_PASSENGER);
                                     break;
+                             case 4:
+                            	 cargaForzada(pasajeros,MAX_PASSENGER, vuelos,TAM_VUELOS);
+                            	 break;
                            }
                        }while(resp!=4);
                      }
